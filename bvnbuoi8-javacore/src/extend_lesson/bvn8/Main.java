@@ -26,9 +26,9 @@ public class Main {
 
     private static int menu(Scanner scanner) {
         System.out.println("Nhập ngành của sinh viên: ");
-        System.out.println("1. Công nghệ thông tin");
-        System.out.println("2. Kinh doanh.");
-        System.out.println("3. Thoát.");
+        System.out.println("a.Công nghệ thông tin");
+        System.out.println("b.Kinh doanh.");
+        System.out.println("c.Thoát.");
         return Integer.parseInt(scanner.nextLine());
     }
     private static void chooseIt(Scanner scanner) {
@@ -62,7 +62,7 @@ public class Main {
         System.out.println("Danh sách sinh viên Biz:");
         for (int i = 0; i < bizStudents.size(); i++) {
             System.out.println(" ");
-            System.out.println("Sinh viên thứ " + (i + 1) + ": " + bizStudents.get(i));
+            System.out.println("Sinh viên thứ: " +(i + 1)+": "+ bizStudents.get(i));
         }
     }
 }
