@@ -2,7 +2,6 @@ package extend_lesson.buoi9.bai1.quanlihodan.services;
 
 import extend_lesson.buoi9.bai1.quanlihodan.entities.Family;
 import extend_lesson.buoi9.bai1.quanlihodan.entities.Member;
-import lab1.services.MemberService;
 
 
 import java.util.ArrayList;

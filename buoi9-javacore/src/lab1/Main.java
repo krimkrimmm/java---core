@@ -25,7 +25,7 @@ public class Main {
         }
         System.out.println(members);
 
-        ArrayList<Member> members = Services.inputMembers(sc, n);
+        ArrayList<Member> member = Services.inputMember(sc, n);
         System.out.println(members);
     }
 }
