@@ -1,19 +1,39 @@
 package extend_lesson.bai.services;
+import extend_lesson.bai.entities.User;
+import java.util.List;
 import java.util.Scanner;
+
 public class ForgotPassword {
-    private UserService userService;
+    private List<User> users;
     private Scanner scanner;
 
-
-    public ForgotPassword(UserService userService, Scanner scanner) {
-        this.userService = userService;
+    public ForgotPassword(List<User> users, Scanner scanner) {
+        this.users = users;
         this.scanner = scanner;
     }
-    public void execute(){
-        System.out.println("nhập email:");
+
+    public User execute() {
+        System.out.print("Email: ");
         String email = scanner.nextLine();
-        System.out.println("nh p");
+
+        for (User user : users) {
+            if (user.getEmail().equals(email)) {
+                System.out.print("New Password: ");
+                String newPassword = scanner.nextLine();
+                user.setPassword(newPassword);
+                System.out.println("Đổi mật khẩu thành công. Vui lòng đăng nhập lại.");
+                return new LogIn(users, scanner).execute();
+            }
+        }
+        System.out.println("Email không tồn tại.");
+        return null;
     }
 }
+
+
+
+
+
+
 
 

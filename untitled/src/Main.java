@@ -29,36 +29,87 @@
 //username phải chưa tồn tại
 //email phải chuẩn (Sử dụng regex), chưa tồn tại trong List
 //password dài từ 7 đến 15 ký tự, chứa ít nhất 1 ký tự in hoa, 1 ký tự đặc biệt (. , - _ ;)
+//entities: user(username, email, password)
+//service: 1 - Đăng nhập(log in)
+////2 - Đăng ký(register)
+//Đăng nhập lại(Log back in)
+//2 - Quên mật khẩu(Forgot Password)
+///1 - Thay đổi username(Change username)
+////2 - Thay đổi email()
+////3 - Thay đổi mật khẩu()
+////4 - Đăng xuất (Sau khi đăng xuất quay về mục yêu cầu đăng nhập hoặc đăng ký)(Log 2out)
+////0 - Thoát chương trình(Exit)
+
 //pvi bai ktra: do while, arraylist, chia tách ham
 
+import extend_lesson.bai.entities.User;
 import extend_lesson.bai.services.LogIn;
 import extend_lesson.bai.services.Register;
-import extend_lesson.bai.services.UserService;
+import extend_lesson.bai.services.ChangePassword;
+import extend_lesson.bai.services.ChangeEmail;
+import extend_lesson.bai.services.ChangeUsername;
+import extend_lesson.bai.services.Exit;
+import extend_lesson.bai.services.LogOut;
+import extend_lesson.bai.services.ForgotPassword;
+import extend_lesson.bai.services.LogBackIn;
 
-import java.util.Scanner;
 import java.util.ArrayList;
-import java.util.regex.Pattern;
+import java.util.List;
+import java.util.Scanner;
 
 public class Main {
+    private static List<User> users = new ArrayList<>();
+    private static Scanner scanner = new Scanner(System.in);
+    private static User user = null;
 
     public static void main(String[] args) {
-        UserService userService = new UserService();
-        Scanner scanner = new Scanner(System.in);
-
         do {
-            System.out.println("1 - Đăng nhập");
-            System.out.println("2 - Đăng ký");
-            System.out.print("Chọn: ");
-            String choice = scanner.nextLine();
-            switch (choice) {
-                case "1":
-                    new LogIn(userService, scanner).execute();
-                    break;
-                case "2":
-                    new Register(userService, scanner).execute();
-                    break;
-                default:
-                    System.out.println("Lựa chọn không hợp lệ.");
+            if (user == null) {
+                System.out.println("1 - Đăng nhập");
+                System.out.println("2 - Đăng ký");
+                System.out.println("0 - Thoát chương trình");
+                int choice = Integer.parseInt(scanner.nextLine());
+
+                switch (choice) {
+                    case 1:
+                        user = new LogIn(users, scanner).execute();
+                        break;
+                    case 2:
+                        new Register(users, scanner).execute();
+                        break;
+                    case 0:
+                        new Exit().execute();
+                        break;
+                    default:
+                        System.out.println("Lựa chọn không hợp lệ.");
+                }
+            } else {
+                System.out.println("1 - Thay đổi username");
+                System.out.println("2 - Thay đổi email");
+                System.out.println("3 - Thay đổi mật khẩu");
+                System.out.println("4 - Đăng xuất");
+                System.out.println("0 - Thoát chương trình");
+                int choice = Integer.parseInt(scanner.nextLine());
+                switch (choice) {
+                    case 1:
+                        new ChangeUsername(users, scanner).execute(user);
+                        break;
+                    case 2:
+                        new ChangeEmail(users, scanner).execute(user);
+                        break;
+                    case 3:
+                        new ChangePassword(scanner).execute(user);
+                        break;
+                    case 4:
+                        new LogOut().execute();
+                        user = null;
+                        break;
+                    case 0:
+                        new Exit().execute();
+                        break;
+                    default:
+                        System.out.println("Lựa chọn không hợp lệ.");
+                }
             }
         } while (true);
     }
@@ -66,23 +117,3 @@ public class Main {
 
 
 
-
-
-
-
-
-
-
-
-
-
-//entities: user(username, email, password)
-//service: 1 - Đăng nhập(log in)
-////2 - Đăng ký(sign up)
-//Đăng nhập lại(Log back in)
-//2 - Quên mật khẩu(Forgot Password)
-///1 - Thay đổi username(Change username)
-////2 - Thay đổi email()
-////3 - Thay đổi mật khẩu()
-////4 - Đăng xuất (Sau khi đăng xuất quay về mục yêu cầu đăng nhập hoặc đăng ký)(Log out)
-////0 - Thoát chương trình(Exit)

@@ -1,37 +1,81 @@
 package extend_lesson.bai.services;
 import extend_lesson.bai.entities.User;
 import java.util.Scanner;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.regex.Pattern;
 public class Register {
-
-    private UserService userService;
+    private List<User> users;
     private Scanner scanner;
-    public Register(UserService userService, Scanner scanner) {
-        this.userService = userService;
+
+    public Register(List<User> users, Scanner scanner) {
+        this.users = users;
         this.scanner = scanner;
     }
-    public void execute(){
-        do{
 
+    public void execute() {
+        System.out.print("Username: ");
+        String username = scanner.nextLine();
+        System.out.print("Email: ");
+        String email = scanner.nextLine();
+        System.out.print("Password: ");
+        String password = scanner.nextLine();
 
-            System.out.println("nhập username:");
-            String username = scanner.nextLine();
-            System.out.println("nhập email:");
-            String email = scanner.nextLine();
-            System.out.println("nhập password:");
-            String password = scanner.nextLine();
-            if (userService.register(username,email,password)){
-                System.out.println("đăng kí thành công.");
-                break;
+        if (isUsernameTaken(username)) {
+            System.out.println("Username đã tồn tại.");
+            return;
+        }
+
+        if (!isValidEmail(email)) {
+            System.out.println("Email không hợp lệ.");
+            return;
+        }
+
+        if (isEmailTaken(email)) {
+            System.out.println("Email đã tồn tại.");
+            return;
+        }
+
+        if (!isValidPassword(password)) {
+            System.out.println("Password không hợp lệ.");
+            return;
+        }
+
+        users.add(new User(username, email, password));
+        System.out.println("Đăng ký thành công.");
+    }
+
+    private boolean isUsernameTaken(String username) {
+        for (User user : users) {
+            if (user.getUsername().equals(username)) {
+                return true;
             }
-            else{
-                System.out.println("Đăng kí thất bại. Username hoặc email đã tồn tại hoặc không hợp lệ.");
+        }
+        return false;
+    }
+
+    private boolean isEmailTaken(String email) {
+        for (User user : users) {
+            if (user.getEmail().equals(email)) {
+                return true;
             }
-        }while (true);
+        }
+        return false;
+    }
+
+    private boolean isValidEmail(String email) {
+        String emailRegex = "^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,6}$";
+        return Pattern.matches(emailRegex, email);
+    }
+
+    private boolean isValidPassword(String password) {
+        if (password.length() < 7 || password.length() > 15) {
+            return false;
+        }
+        boolean hasUppercase = !password.equals(password.toLowerCase());
+        boolean hasSpecial = password.matches("[A-Za-z0-9 ]*");
+        return hasUppercase && !hasSpecial;
     }
 }
-
 
 
 
