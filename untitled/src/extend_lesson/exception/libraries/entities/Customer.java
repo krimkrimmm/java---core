@@ -1,11 +1,31 @@
 package extend_lesson.exception.libraries.entities;
-
+import java.util.ArrayList;
+import java.util.List;
 public class Customer {
-    private String namebook;
-    private String author;
-    private int bookid;
+    private String name;
+    private String email;
 
-    private double date;
-    private int quantity;
+    private String password;
+    private List<Book> borrowedBooks = new ArrayList<>();
 
+    public Customer(String name, String email, String password) {
+        this.name = name;
+        this.email = email;
+        this.password = password;
+    }
+
+
+    // Getters and Setters
+    public String getEmail() { return email; }
+    public String getPassword() { return password; }
+    public String getName() { return name; }
+    public List<Book> getBorrowedBooks() { return borrowedBooks; }
+
+    public void borrowBook(Book book) {
+        borrowedBooks.add(book);
+    }
+
+    public void returnBook(Book book) {
+        borrowedBooks.remove(book);
+    }
 }

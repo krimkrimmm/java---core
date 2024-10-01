@@ -1,66 +1,54 @@
 package extend_lesson.exception.libraries.view;
-import extend_lesson.exception.libraries.database.Database;
-import extend_lesson.exception.libraries.entities.Product;
-import extend_lesson.exception.sale.service.ProductService;
-import extend_lesson.exception.sale.utils.Utils;
+import extend_lesson.exception.libraries.service.CustomerService;
+import extend_lesson.exception.libraries.service.LibrarianService;
+import extend_lesson.exception.libraries.service.AdminService;
+import extend_lesson.exception.libraries.entities.Customer;
+import extend_lesson.exception.libraries.entities.Librarian;
+
 import java.util.Scanner;
 
 public class Menu {
-    ProductService productService = new ProductService();
-    public void displayMenuForSeller(Scanner scanner){
-        System.out.println("1- Xem danh sách sản phẩm");
-        System.out.println("2- Xem chi tiết sản phẩm");
-        System.out.println("3- Thêm sản phẩm");
-        System.out.println("4- Xóa sản phẩm");
-        System.out.println("5- Filter");
-        System.out.println("Mời bạn lựa chọn: ");
-        chooseMenuSeller(scanner);
-    }
-    public void chooseMenuSeller(Scanner scanner){
-        int choose = Utils.inputInteger(scanner);
+    private CustomerService customerService = new CustomerService();
+    private LibrarianService librarianService = new LibrarianService();
+    private AdminService adminService = new AdminService();
 
-        switch (choose){
-            case 1:
-                System.out.println( Database.products);
-                break;
-            case 2:
+    public void displayMainMenu() {
+        Scanner scanner = new Scanner(System.in);
+        while (true) {
+            System.out.println("1. Đăng ký với tư cách là Khách hàng");
+            System.out.println("2. Đăng nhập với tư cách là Khách hàng");
+            System.out.println("3. Thoát");
+            int choice = scanner.nextInt();
+            scanner.nextLine(); // Consume newline
 
-                break;
-            case 3:
-                Product product = productService.createProduct(scanner);
-                Database.products.add(product);
-                break;
-            case 4:
-                break;
-            default:
-                System.exit(0);
-        }
-    }
+            switch (choice) {
+                case 1:
+                    System.out.print("Nhập tên: ");
+                    String name = scanner.nextLine();
+                    System.out.print("Nhập email: ");
+                    String email = scanner.nextLine();
+                    System.out.print("Nhập mật khẩu: ");
+                    String password = scanner.nextLine();
+                    customerService.register(new Customer(name, email, password));
+                    break;
+                case 2:
+                    System.out.print("Nhập email: ");
+                    String loginEmail = scanner.nextLine();
 
-    public void menuFilter(Scanner scanner){
-        System.out.println("1- Lọc theo Khu vực");
-        System.out.println("2- Lọc theo giá sp:");
-        System.out.println("Mời bạn lựa chọn: ");
-        chooseMenuFilter(scanner);
-    }
-
-    private void chooseMenuFilter(Scanner scanner) {
-        int choose = Utils.inputInteger(scanner);
-        switch (choose){
-            case 1:
-                System.out.println("MỜi bạn chọn khu vực: 1- HN  2- HCM");
-                int area = Utils.inputInteger(scanner);
-                if(area == 1){
-
-                } else if(area == 2){
-
-                } else {
-
-                }
-                break;
-            case 2:
-                break;
-            default:
+                    System.out.print("Nhập mật khẩu: ");
+                    String loginPassword = scanner.nextLine();
+                    System.out.println("Đăng nhập thành công");
+                    Customer loggedInCustomer = customerService.login(loginEmail, loginPassword);
+                    if (loggedInCustomer != null) {
+                        // Proceed to customer functionalities
+                    }
+                    break;
+                case 3:
+                    System.out.println("Thoát...");
+                    return;
+                default:
+                    System.out.println("Lựa chọn không hợp lệ. Hãy thử lại.");
+            }
         }
     }
 }

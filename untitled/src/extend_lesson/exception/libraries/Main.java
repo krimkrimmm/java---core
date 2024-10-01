@@ -39,20 +39,11 @@
 package extend_lesson.exception.libraries;
 import extend_lesson.exception.libraries.view.Menu;
 import java.util.Scanner;
+
 public class Main {
     public static void main(String[] args) {
-        Scanner scanner = new Scanner(System.in);
         Menu menu = new Menu();
-
-        do {
-            menu.displayMenuForSeller(scanner);
-        } while (true);
-
+        menu.displayMainMenu(); // Start the application
     }
 }
-
-
-
-
-
 
