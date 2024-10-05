@@ -1,21 +1,19 @@
 package service;
-
 import constant.Regex;
 import constant.Status;
-import constant.UserRole;
-import entity.User;
+import enums.Role;
+import entities.User;
 import main.Main;
+
 import util.FileUtil;
 import util.InputUtil;
 
 import java.util.*;
-
-
 public class UserService {
-
     private List<User> users;
     private List<String> lockedUser = new ArrayList<>();
     private static final HashSet<String> lockUserByEmails = new HashSet<>();
+
     private static final String USER_DATA_FILE = "users.json";
     private static final String ADMIN_EMAIL = "admin@gmail.com";
     private static final String ADMIN_PASSWORD = "admin";
@@ -35,7 +33,7 @@ public class UserService {
                 return null;
             }
             if (!email.matches(Regex.EMAIL_REGEX)) {
-                System.out.println("Email không hợp lệ, vui lòng nhập lại đúng định dạng mail: ");
+                System.out.println("Email không hợp lệ, vui lòng nhập lại đúng định dạng email: ");
                 continue;
             }
             System.out.println("Nhập mật khẩu (nhập 'exit' để thoát): ");
@@ -131,7 +129,7 @@ public class UserService {
         System.out.println("Mời bạn nhập địa chỉ : ");
         address = new Scanner(System.in).nextLine();
         double balance = 0;
-        User user = new User(AUTO_ID++, email, password, phone, UserRole.USER, address, balance, name, Status.ACTIVE);
+        User user = new User(AUTO_ID++, email, password, phone, Role.USER, address, balance, name, Status.ACTIVE);
         users.add(user);
         saveUserData();
         return user;
@@ -211,21 +209,21 @@ public class UserService {
                 System.out.println("Tên không hợp lệ. Vui lòng nhập lại.");
             }
         }
-        UserRole userRole = null;
+        Role role = null;
         System.out.println("Mời bạn lựa chọn chức năng của người dùng: ");
         System.out.println("1. Admin");
         System.out.println("2. Khách hàng");
         int choice = InputUtil.chooseOption("Xin mời chọn chức năng: ",
                 "Chức năng là số dương từ 1 tới 2, vui lòng nhập lại: ", 1, 2);
-        userRole = switch (choice) {
-            case 1 -> UserRole.ADMIN;
-            case 2 -> UserRole.USER;
-            default -> userRole;
+        role = switch (choice) {
+            case 1 -> Role.ADMIN;
+            case 2 -> Role.USER;
+            default -> role;
         };
         System.out.println("Mời bạn nhập địa chỉ : ");
         address = new Scanner(System.in).nextLine();
         double balance = 0;
-        User user = new User(AUTO_ID++, email, password, userRole, phone, address, balance, name, Status.ACTIVE);
+        User user = new User(AUTO_ID++, email, password, role, phone, address, balance, name, Status.ACTIVE);
         users.add(user);
         saveUserData();
         return user;
@@ -368,7 +366,7 @@ public class UserService {
     }
 
     private void createAdmin() {
-        User user = new User(ADMIN_EMAIL, ADMIN_PASSWORD, UserRole.ADMIN);
+        User user = new User(ADMIN_EMAIL, ADMIN_PASSWORD, Role.ADMIN);
         user.setId(0);
         users.add(user);
         saveUserData();

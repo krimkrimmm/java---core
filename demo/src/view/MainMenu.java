@@ -1,7 +1,6 @@
 package view;
-
-import constant.UserRole;
-import entity.User;
+import enums.Role;
+import entities.User;
 import main.Main;
 import service.UserService;
 import util.InputUtil;
@@ -13,13 +12,12 @@ public class MainMenu {
     private final UserMenu userMenu = new UserMenu(userService);
     private final AdminMenu adminMenu = new AdminMenu(userService);
 
-
     public void menu() {
 
 
         while (true) {
             System.out.println("==================================================================");
-            System.out.println("------- PHẦN MỀM QUẢN LÝ VÀ MUA BÁN VÉ XEM PHIM CHIẾU RẠP --------");
+            System.out.println("------- PHẦN MỀM QUẢN LÝ THƯ VỆN--------");
             System.out.println("1. Đăng nhập");
             System.out.println("2. Đăng ký");
             System.out.println("3. Thoát");
@@ -33,7 +31,7 @@ public class MainMenu {
                         break;
                     }
                     Main.LOGGED_IN_USER = loggedInUser;
-                    if (loggedInUser.getRole().equals(UserRole.USER)) {
+                    if (loggedInUser.getRole().equals(Role.USER)) {
                         userMenu.menu();
                         break;
                     }
@@ -52,12 +50,9 @@ public class MainMenu {
             }
         }
     }
-
     public void initializeData() {
         userService.setUsers();
         userService.createDefaultAdminUser();
         userService.findCurrentAutoId();
     }
-
-
 }
