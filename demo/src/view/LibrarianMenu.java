@@ -6,17 +6,18 @@
 ////- Đăng xuất: Kết thúc phiên làm việc và đăng xuất khỏi hệ thống.
 
 package view;
-import entities.User;
-import service.*;
-import util.InputUtil;
-import java.util.InputMismatchException;
-import main.Main;
-import java.util.Scanner;
-public class LibrarianMenu {
-    private final UserService userService;
 
-    public LibrarianMenu(UserService userService) {
-        this.userService = userService;
+import entities.Book;
+import service.LibrarianService;
+import util.InputUtil;
+
+import java.util.List;
+
+public class LibrarianMenu {
+    private final LibrarianService librarianService;
+
+    public LibrarianMenu(LibrarianService librarianService) {
+        this.librarianService = librarianService;
     }
     public void menu(){
         while (true){
@@ -27,6 +28,25 @@ public class LibrarianMenu {
 
             System.out.println("4.Quản lý người dùng");
             System.out.println("5.Đăng xuất");
+
+            int choice = InputUtil.chooseOption("Xin mời chọn chức năng: ",
+                    "Chức năng là số dương từ 1 tới 5 vui lòng nhập lại: ", 1, 5);
+
+            switch (choice) {
+                case 1:
+                    System.out.println("Thong tin sách ");
+                    List<Book> books = librarianService.getBooks();
+                    System.out.println(books);
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    break;
+                case 4:
+                    break;
+                case 5:
+                    return;
+            }
         }
     }
 }

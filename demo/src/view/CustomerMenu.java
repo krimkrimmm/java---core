@@ -12,18 +12,15 @@
 //- Đăng xuất: Kết thúc phiên làm việc và đăng xuất khỏi hệ thống.
 
 package view;
-import entities.User;
-import service.*;
+import entities.Customer;
+import service.CustomerService;
 import util.InputUtil;
-import java.util.InputMismatchException;
-import main.Main;
 
-import java.util.Scanner;
 public class CustomerMenu {
-    private final UserService userService;
-    public CustomerMenu(UserService userService)
+    private final CustomerService customerService;
+    public CustomerMenu(CustomerService customerService)
     {
-        this.userService = userService;
+        this.customerService = customerService;
     }
     public void menu(){
         while (true){
@@ -39,22 +36,41 @@ public class CustomerMenu {
             System.out.println("8. Xem lịch sử mua sách");
             System.out.println("9. Cập nhật tài khoản cá nhân");
             System.out.println("10. Đăng xuất");
+            int choice = InputUtil.chooseOption("Xin mời chọn chức năng: ",
+                    "Chức năng là số dương từ 1 tới 10 vui lòng nhập lại: ", 1, 10);
+
+            switch (choice){
+                case 1:
+
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    break;
+                case 4:
+                    break;
+                case 5:
+                    break;
+
+                case 6:
+                    break;
+
+                case 7:
+                    break;
+                case 8:
+                    break;
+                case 9:
+                    break;
+
+                case 10:
+                    return;
+
+
+
+            }
         }
     }
 }
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 

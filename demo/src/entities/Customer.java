@@ -1,37 +1,156 @@
 package entities;
 
-import java.util.ArrayList;
-import java.util.List;
+import constant.Status;
+import enums.Role;
 public class Customer {
-    private String name;
+    private static int AUTO_ID = 1;
+
+    private int id;
     private String email;
-
     private String password;
-    private List<Book> borrowedBooks = new ArrayList<>();
+    private Role role;
+    private String phone;
+    private String address;
+    private double balance;
+    private String name;
+    private Status status;
 
-    public Customer(String name, String email, String password) {
-        this.name = name;
+    public Customer(int id, String email, String password, Role role, String phone, String address, double balance, String name, Status status) {
+        this.id = id;
         this.email = email;
+        this.password = password;
+        this.role = role;
+        this.phone = phone;
+        this.address = address;
+        this.balance = balance;
+        this.name = name;
+
+        this.status = status;
+    }
+
+    public Customer(String email, String password, Role role, String phone, String address) {
+        this.email = email;
+        this.password = password;
+        this.role = role;
+        this.phone = phone;
+        this.address = address;
+    }
+    public Customer(String email, String password, Role role) {
+        this.email = email;
+        this.password = password;
+        this.role = role;
+    }
+
+    public Customer() {
+        this.id = AUTO_ID;
+        AUTO_ID++;
+    }
+
+    public Customer(int id, String email, String password, String phone, Role role, String address, double balance, String name, Status status) {
+        this.id = id;
+        this.email = email;
+        this.password = password;
+        this.phone = phone;
+        this.role= role;
+        this.address = address;
+        this.balance = balance;
+        this.name = name;
+        this.status = status;
+    }
+
+    public static int getAutoId() {
+        return AUTO_ID;
+    }
+
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
         this.password = password;
     }
 
-
-    // Getters and Setters
-    public String getEmail() { return email; }
-    public String getPassword() { return password; }
-    public String getName() { return name; }
-    public List<Book> getBorrowedBooks() { return borrowedBooks; }
-
-    public void borrowBook(Book book) {
-        borrowedBooks.add(book);
+    public Role getRole() {
+        return role;
     }
 
-    public void returnBook(Book book) {
-        borrowedBooks.remove(book);
+    public void setRole(Role role) {
+        this.role = role;
     }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public double getBalance() {
+        return balance;
+    }
+
+    public void setBalance(double balance) {
+        this.balance = balance;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public Status getStatus() {
+        return status;
+    }
+
+    public void setStatus(Status status) {
+        this.status = status;
+    }
+
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", role=" + role +
+                ", phone='" + phone + '\'' +
+                ", address='" + address + '\'' +
+                ", balance=" + balance +
+                ", name='" + name + '\'' +
+                ", status=" + status +
+                '}';
+    }
+
 }
-
-
 
 
 

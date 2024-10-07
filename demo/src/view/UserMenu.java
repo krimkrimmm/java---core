@@ -3,10 +3,10 @@ import service.*;
 import util.InputUtil;
 import main.Main;
 public class UserMenu {
-    private final UserService userService;
+    private final CustomerService customerService;
 
-    public UserMenu(UserService userService) {
-        this.userService = userService;
+    public UserMenu(CustomerService customerService) {
+        this.customerService = customerService;
     }
 
     public void menu() {
@@ -82,7 +82,7 @@ public class UserMenu {
                 case 3:
                     break;
                 case 4:
-                    userService.showBalance();
+                    customerService.showBalance();
                     break;
                 case 5:
                     return;

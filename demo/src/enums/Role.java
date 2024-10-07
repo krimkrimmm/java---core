@@ -2,7 +2,8 @@ package enums;
 
 public enum Role {
     ADMIN("Admin"),
-    USER("User");
+    LIBRARIAN("Librarian"),
+    CUSTOMER("Customer");
 
     private final String roleName;
 

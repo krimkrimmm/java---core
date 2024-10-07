@@ -9,18 +9,18 @@
 ////- Thống kê và báo cáo: Thống kê số lượng sách mượn/trả, báo cáo người dùng.
 ////- Đăng xuất: Kết thúc phiên làm việc và đăng xuất khỏi hệ thống
 package view;
-import entities.User;
-import service.*;
+import entities.Customer;
+import service.AdminService;
+import service.CustomerService;
 import util.InputUtil;
 import java.util.InputMismatchException;
-import main.Main;
 
 import java.util.Scanner;
 public class AdminMenu {
-    private final UserService userService;
+    private final AdminService adminService;
 
-    public AdminMenu(UserService userService) {
-        this.userService = userService;
+    public AdminMenu(AdminService adminService) {
+        this.adminService = adminService;
     }
     public void menu() {
         while (true)
@@ -33,7 +33,8 @@ public class AdminMenu {
             System.out.println("5. Thống kê, báo cáo doanh thu");
             System.out.println("6. Đăng xuất");
             int choice = InputUtil.chooseOption("Xin mời chọn chức năng: ",
-                    "Chức năng là số dương từ 1 tới 6 vui lòng nhập lại: ", 1, 7);
+                    "Chức năng là số dương từ 1 tới 6 vui lòng nhập lại: ", 1, 6);
+
             switch (choice) {
                 case 1:
                     userManagementMenu();
@@ -155,10 +156,12 @@ public class AdminMenu {
                     "Chức năng là số dương từ 1 tới 6, vui lòng nhập lại: ", 1, 6);
             switch (choice) {
                 case 1:
-                    userService.findUserByMail();
+                    System.out.println("Mời bạn nhập Email của User muốn tìm: ");
+                    String email = new Scanner(System.in).nextLine();
+                    adminService.findUserByMail(email);
                     break;
                 case 2:
-                    userService.createUserCommonInfo();
+                    adminService.createUserCommonInfo();
                     break;
                 case 3:
                     int idUserUpdate;
@@ -172,14 +175,14 @@ public class AdminMenu {
                         }
                         break;
                     }
-                    userService.updateUserInformation(idUserUpdate);
+                    adminService.updateUserInformation(idUserUpdate);
                     break;
                 case 4:
                     statusUserManagementMenu();
 
                     break;
                 case 5:
-                    userService.transactionHistory();
+                    adminService.transactionHistory();
                     break;
                 case 6:
                     return;
@@ -189,7 +192,7 @@ public class AdminMenu {
     }
 
     private void statusUserManagementMenu() {
-        User user;
+        Customer user;
         int idUserLock;
         while (true) {
             System.out.println("------- PHẦN MỀM QUẢN LÝ THƯ VIỆN --------");
@@ -213,14 +216,14 @@ public class AdminMenu {
                             System.out.println("Giá trị bạn vừa nhập không phải là một số nguyên. Vui lòng nhập lại.");
                             continue;
                         }
-                        user = userService.findUserById(idUserLock);
+                        user = adminService.findUserById(idUserLock);
                         if (user == null) {
                             System.out.print("Thông tin không chính xác , vui lòng nhập lại : ");
                             continue;
                         }
                         break;
                     }
-                    userService.lockedUserById(idUserLock);
+                    adminService.lockedUserById(idUserLock);
                     break;
                 case 2:
                     while (true) {
@@ -231,14 +234,14 @@ public class AdminMenu {
                             System.out.println("Giá trị bạn vừa nhập không phải là một số nguyên. Vui lòng nhập lại.");
                             continue;
                         }
-                        user = userService.findUserById(idUserLock);
+                        user = adminService.findUserById(idUserLock);
                         if (user == null) {
                             System.out.print("Thông tin không chính xác , vui lòng nhập lại : ");
                             continue;
                         }
                         break;
                     }
-                    userService.unlockedUserById(idUserLock);
+                    adminService.unlockedUserById(idUserLock);
                     break;
                 case 3:
                     return;
@@ -273,3 +276,8 @@ public class AdminMenu {
         }
     }
 }
+
+
+
+
+
