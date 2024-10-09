@@ -2,7 +2,7 @@ package service;
 import constant.Regex;
 import constant.Status;
 import enums.Role;
-import entities.Customer;
+import entities.User;
 import main.Main;
 
 import util.FileUtil;
@@ -10,22 +10,24 @@ import util.InputUtil;
 
 import java.util.*;
 public class AccountService {
-    private List<Customer> users;
+    private List<User> users;
     private List<String> lockedCustomer = new ArrayList<>();
     private static final HashSet<String> lockUserByEmails = new HashSet<>();
 
     private static final String USER_DATA_FILE = "users.json";
     private static final String ADMIN_EMAIL = "admin@gmail.com";
     private static final String ADMIN_PASSWORD = "admin";
-    private final FileUtil<Customer> fileUtil = new FileUtil<>();
+    private final FileUtil<User> fileUtil = new FileUtil<>();
     private static int AUTO_ID;
+
+    public static User user;
 
 
     private static final int MAX_LOGIN_TIMES = 5;
 
-    public Customer login() {
+    public User login() {
         int loginCount = 1;
-        Customer user = null;
+        user = null;
         do {
             System.out.println("Nhập email (nhập 'exit' để thoát): ");
             String email = new Scanner(System.in).nextLine();
@@ -64,8 +66,8 @@ public class AccountService {
         return user;
     }
 
-    public Customer findUserById(int idUser) {
-        for (Customer user : users) {
+    public User findUserById(int idUser) {
+        for (User user : users) {
             if (user.getId() == idUser) {
                 return user;
             }
@@ -73,7 +75,7 @@ public class AccountService {
         return null;
     }
 
-    public Customer register() {
+    public User register() {
         String email;
         String password;
         String phone;
@@ -89,7 +91,7 @@ public class AccountService {
                 System.out.println("Email không hợp lệ, vui lòng nhập lại đúng định dạng mail: ");
                 continue;
             }
-            Customer existedUser = findUserByEmail(email);
+            User existedUser = findUserByEmail(email);
             if (existedUser != null) {
                 System.out.println("Email đã tồn tại trong hệ thống, vui lòng nhập lại: ");
                 continue;
@@ -129,14 +131,14 @@ public class AccountService {
         System.out.println("Mời bạn nhập địa chỉ : ");
         address = new Scanner(System.in).nextLine();
         double balance = 0;
-        Customer user = new Customer(AUTO_ID++, email, password, phone, Role.CUSTOMER, address, balance, name, Status.ACTIVE);
+        User user = new User(AUTO_ID++, email, password, phone, Role.CUSTOMER, address, balance, name, Status.ACTIVE);
         users.add(user);
         saveUserData();
         return user;
     }
 
-    private Customer findUserByEmail(String email) {
-        for (Customer user : users) {
+    private User findUserByEmail(String email) {
+        for (User user : users) {
             if (user.getEmail().equals(email)) {
                 return user;
             }
@@ -144,8 +146,8 @@ public class AccountService {
         return null;
     }
 
-    private Customer findUserByEmailAndPassword(String email, String password) {
-        for (Customer user : users) {
+    private User findUserByEmailAndPassword(String email, String password) {
+        for (User user : users) {
             if (user.getEmail().equalsIgnoreCase(email) && user.getPassword().equals(password)) {
                 return user;
             }
@@ -153,7 +155,7 @@ public class AccountService {
         return null;
     }
 
-    public Customer createUserCommonInfo() {
+    public User createUserCommonInfo() {
         // TODO - nhập các thông tin cần tạo cho 1 user
         //  (chú ý, cần chọn quyền của user vì đây là admin tạo user nên admin hoan toàn có thể chọn user họ tạo
         //  là một admin hay là 1 user bình thường)
@@ -172,7 +174,7 @@ public class AccountService {
                 System.out.println("Email không hợp lệ, vui lòng nhập lại đúng định dạng mail: ");
                 continue;
             }
-            Customer existedUser = findUserByEmail(email);
+            User existedUser = findUserByEmail(email);
             if (existedUser != null) {
                 System.out.println("Email đã tồn tại trong hệ thống, vui lòng nhập lại: ");
                 continue;
@@ -223,7 +225,7 @@ public class AccountService {
         System.out.println("Mời bạn nhập địa chỉ : ");
         address = new Scanner(System.in).nextLine();
         double balance = 0;
-        Customer user = new Customer(AUTO_ID++, email, password, role, phone, address, balance, name, Status.ACTIVE);
+        User user = new User(AUTO_ID++, email, password, role, phone, address, balance, name, Status.ACTIVE);
         users.add(user);
         saveUserData();
         return user;
@@ -233,7 +235,7 @@ public class AccountService {
     public void findUserByMail() {
         System.out.println("Mời bạn nhập email của User : ");
         String email = new Scanner(System.in).nextLine();
-        for (Customer user : users) {
+        for (User user : users) {
             if (user.getEmail() != null && user.getEmail().toLowerCase().contains(email.toLowerCase())) {
                 System.out.println(user);
             }
@@ -242,9 +244,9 @@ public class AccountService {
     }
 
 
-    public void showUsers(List<Customer> users1) {
+    public void showUsers(List<User> users1) {
         printHeader();
-        for (Customer user : users1) {
+        for (User user : users1) {
             showUserDetail(user);
         }
     }
@@ -254,12 +256,12 @@ public class AccountService {
         System.out.println("------------------------------------------------------------------------------------------------------------------------------");
     }
 
-    public void showUserDetail(Customer user) {
+    public void showUserDetail(User user) {
         System.out.printf("%-5s%-30s%-30s%-20s%-20s%-10s%-10s%-10s%n", user.getId(), user.getName(), user.getEmail(), user.getPhone(), user.getAddress(), user.getRole(), user.getBalance(),user.getStatus());
     }
 
     public void updateUserInformation(int idUserUpdate) {
-        Customer user = findUserById(idUserUpdate);
+        User user = findUserById(idUserUpdate);
         System.out.println("Mời bạn chọn phần thông tin muốn chỉnh sửa: ");
         System.out.println("1. Email");
         System.out.println("2. Password");
@@ -280,7 +282,7 @@ public class AccountService {
                         continue;
                     }
                     boolean coTrungEmailKhong = false;
-                    for (Customer user1 : users) {
+                    for (User user1 : users) {
                         if (newEmail.equalsIgnoreCase(user1.getEmail()) && user1.getId() != user.getId()) {
                             System.out.println("Email đã tồn tại vui lòng nhập lại");
                             coTrungEmailKhong = true;
@@ -336,7 +338,7 @@ public class AccountService {
         saveUserData();// FILE - khi có thay đổi về list user, can luu vao file
     }
 
-    public void showUser(Customer user) {
+    public void showUser(User user) {
         printHeader();
         showUserDetail(user);
     }
@@ -347,7 +349,7 @@ public class AccountService {
 
     public void setUsers() {
 
-        List<Customer> userList = fileUtil.readDataFromFile(USER_DATA_FILE, Customer[].class);
+        List<User> userList = fileUtil.readDataFromFile(USER_DATA_FILE, User[].class);
         users = userList != null ? userList : new ArrayList<>();
     }
 
@@ -356,7 +358,7 @@ public class AccountService {
             createAdmin();
             return;
         }
-        for (Customer user : users) {
+        for (User user : users) {
             if (user.getEmail().equalsIgnoreCase(ADMIN_EMAIL)
                     && user.getPassword().equalsIgnoreCase(ADMIN_PASSWORD)) {
                 return;
@@ -366,7 +368,7 @@ public class AccountService {
     }
 
     private void createAdmin() {
-        Customer user = new Customer(ADMIN_EMAIL, ADMIN_PASSWORD, Role.ADMIN);
+        User user = new User(ADMIN_EMAIL, ADMIN_PASSWORD, Role.ADMIN);
         user.setId(0);
         users.add(user);
         saveUserData();
@@ -374,7 +376,7 @@ public class AccountService {
 
     public void findCurrentAutoId() {
         int maxId = -1;
-        for (Customer user : users) {
+        for (User user : users) {
             if (user.getId() > maxId) {
                 maxId = user.getId();
             }
@@ -382,8 +384,8 @@ public class AccountService {
         AUTO_ID = maxId + 1;
     }
 
-    public Customer getLoggedInUser() {
-        for (Customer userTemp : users) {
+    public User getLoggedInUser() {
+        for (User userTemp : users) {
             if (userTemp.getId() == Main.LOGGED_IN_CUSTOMER.getId()) {
                 return userTemp;
             }
@@ -473,7 +475,7 @@ public class AccountService {
 //    }
 
     public void showBalance() {
-        Customer user = getLoggedInUser();
+        User user = getLoggedInUser();
         System.out.println("Số dư tài khoản của khách hàng là " + user.getBalance());
     }
 
@@ -482,7 +484,7 @@ public class AccountService {
 
     public void lockedUserById(int idUserLock) {
 
-        for (Customer user:users) {
+        for (User user:users) {
             if (user.getId() == idUserLock) {
                 user.setStatus(Status.INACTIVE);
                 System.out.println("User có ID trên đã được khóa");
@@ -495,7 +497,7 @@ public class AccountService {
     }
 
     public void unlockedUserById(int idUserLock) {
-        for (Customer user:users) {
+        for (User user:users) {
             if (user.getId() == idUserLock) {
                 user.setStatus(Status.ACTIVE);
                 System.out.println("User có ID trên đã được mở khóa");
@@ -508,7 +510,7 @@ public class AccountService {
     }
 
     public void updateUserBalance(int idUser, double amount) {
-        for (Customer user : users) {
+        for (User user : users) {
             if (user.getId() == idUser) {
                 user.setBalance(user.getBalance() + amount);
                 System.out.println("Số dư tài khoản của quý khách là " + user.getBalance());

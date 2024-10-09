@@ -1,9 +1,10 @@
 package view;
-import entities.Customer1;
 import enums.Role;
-import entities.Customer;
+import entities.*;
+import entities.User;
 import main.Main;
 import service.AccountService;
+
 import service.AdminService;
 import service.CustomerService;
 import service.LibrarianService;
@@ -14,10 +15,15 @@ public class MainMenu {
     private final AccountService accountService = new AccountService();
     private final AdminService adminService = new AdminService();
     private final LibrarianService librarianService = new LibrarianService();
-    private final AdminMenu adminMenu = new AdminMenu(adminService);
-    private final CustomerMenu customerMenu = new CustomerMenu(customerService);
-    private final LibrarianMenu librarianMenu = new LibrarianMenu(librarianService);
+    private final AdminMenu adminMenu;
 
+    private final CustomerMenu customerMenu;
+    private final LibrarianMenu librarianMenu;
+    public MainMenu(){
+        this.customerMenu = new CustomerMenu(customerService,this);
+        this.adminMenu = new AdminMenu(adminService,this);
+        this.librarianMenu = new LibrarianMenu(librarianService,this);
+    }
     public void menu() {
 
         while (true) {
@@ -30,31 +36,15 @@ public class MainMenu {
                     "Chức năng là số dương từ 1 tới 3, vui lòng nhập lại: ", 1, 3);
             switch (choice) {
                 case 1:
-                    System.out.println("1. Đăng nhập voi admin");
-                    System.out.println("2. Đăng nhập voi customer");
-                    System.out.println("3. Đăng nhập voi librarian");
-                    switch (choice) {
-                        case 1:
-                            Customer loggedInCustomer = accountService.login();
+                            User loggedInCustomer = accountService.login();
                             if (loggedInCustomer == null) {
                                 System.out.println("Đăng nhập thất bại!!!");
-                                break;
-                            }
-                            Main.LOGGED_IN_CUSTOMER = loggedInCustomer;
-+                            if (loggedInCustomer.getRole().equals(Role.CUSTOMER)) {
-                                customerMenu.menu();
-                                break;
-                            } else if (loggedInCustomer.getRole().equals(Role.ADMIN)) {
-                                adminMenu.menu();
-                                break;
                             } else {
-                                librarianMenu.menu();
-                                break;
+                                mainmenu(loggedInCustomer);
                             }
-
-                    }
+                    break;
                 case 2:
-                    Customer registeredUser = accountService.register();
+                    User registeredUser = accountService.register();
                     if (registeredUser == null) {
                         System.out.println("Dừng đăng ký tài khoản!!!");
                         break;
@@ -66,9 +56,71 @@ public class MainMenu {
             }
         }
     }
+    public void mainmenu(User user){
+        System.out.println("==================================================================");
+        System.out.println("1.Trang chủ");
+        System.out.println("2.Trang sách");
+        System.out.println("3.Giỏ sách");
+        System.out.println("4. Chức năng cơ bản");
+
+        if (user.getRole().equals(Role.LIBRARIAN) || user.getRole().equals(Role.ADMIN)) {
+            System.out.println("5. Chức năng librarian");
+        } else {
+            System.out.println("5. Chức năng này đang khóa");
+        }
+
+        if (user.getRole().equals(Role.ADMIN)) {
+            System.out.println("6. Chức năng admin");
+        } else {
+            System.out.println("6. Chức năng này đang khóa");
+        }
+
+        System.out.println("7. Thoát");
+        int choice = InputUtil.chooseOption("Xin mời chọn chức năng", "Vui lòng nhập lại: ", 1, 7);
+
+        switch (choice) {
+            case 1:
+                // Xử lý Trang chủ
+                break;
+            case 2:
+                // Xử lý Trang sách
+                break;
+            case 3:
+                // Xử lý Giỏ sách
+                break;
+            case 4:
+                customerMenu.menu();
+                break;
+            case 5:
+                if (!(user.getRole().equals(Role.LIBRARIAN) || user.getRole().equals(Role.ADMIN))) {
+                    System.out.println("Bạn phải là librarian hoặc admin");
+                    mainmenu(AccountService.user);
+                    break;
+                }
+                librarianMenu.menu();
+                break;
+            case 6:
+                if (!user.getRole().equals(Role.ADMIN)) {
+                    System.out.println("Bạn phải là admin");
+                    mainmenu(AccountService.user);
+                    break;
+                }
+                adminMenu.menu();
+                break;
+            case 7:
+                return;
+        }
+    }
+
     public void initializeData() {
         accountService.setUsers();
         accountService.createDefaultAdminUser();
         accountService.findCurrentAutoId();
     }
 }
+
+
+
+
+
+

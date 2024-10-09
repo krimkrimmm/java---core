@@ -12,15 +12,18 @@
 //- Đăng xuất: Kết thúc phiên làm việc và đăng xuất khỏi hệ thống.
 
 package view;
-import entities.Customer;
+import entities.*;
+import service.*;
 import service.CustomerService;
 import util.InputUtil;
 
 public class CustomerMenu {
     private final CustomerService customerService;
-    public CustomerMenu(CustomerService customerService)
+    private final MainMenu mainMenu;  // Thay đổi để không khởi tạo MainMenu
+    public CustomerMenu(CustomerService customerService, MainMenu mainMenu)
     {
         this.customerService = customerService;
+        this.mainMenu = mainMenu;  // Nhận MainMenu từ tham số
     }
     public void menu(){
         while (true){
@@ -38,45 +41,41 @@ public class CustomerMenu {
             System.out.println("10. Đăng xuất");
             int choice = InputUtil.chooseOption("Xin mời chọn chức năng: ",
                     "Chức năng là số dương từ 1 tới 10 vui lòng nhập lại: ", 1, 10);
-
             switch (choice){
                 case 1:
+                    // Thực hiện hành động cho lựa chọn 1
 
                     break;
                 case 2:
+                    // Thực hiện hành động cho lựa chọn 2
                     break;
                 case 3:
+                    // Thực hiện hành động cho lựa chọn 3
                     break;
                 case 4:
+                    // Thực hiện hành động cho lựa chọn 4
                     break;
                 case 5:
+                    // Thực hiện hành động cho lựa chọn 5
                     break;
-
                 case 6:
+                    // Thực hiện hành động cho lựa chọn 6
                     break;
-
                 case 7:
+                    // Thực hiện hành động cho lựa chọn 7
                     break;
                 case 8:
+                    // Thực hiện hành động cho lựa chọn 8
                     break;
                 case 9:
+                    // Thực hiện hành động cho lựa chọn 9
                     break;
 
                 case 10:
+                    mainMenu.mainmenu(AccountService.user);
                     return;
-
-
-
             }
         }
     }
 }
-
-
-
-
-
-
-
-
 

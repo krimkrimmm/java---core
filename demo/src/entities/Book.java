@@ -15,15 +15,25 @@ public class Book {
     }
     // Getters and Setters
 
-    public String getTitle() { return title; }
-    public String getAuthor() { return author; }
-    public String getIsbn() { return isbn; }
-    public int getQuantity() { return quantity; }
-    public double getPrice() { return price; }
+    public String getTitle() {
+        return title;
+    }
+    public String getAuthor() {
+        return author;
+    }
+    public String getIsbn() {
+        return isbn;
+    }
 
-    public void setQuantity(int quantity) { this.quantity = quantity; }
+    public int getQuantity() {
+        return quantity;
+    }
+    public double getPrice() {
+        return price;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
 }
-
-
-
-

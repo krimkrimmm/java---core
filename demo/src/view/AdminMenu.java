@@ -9,19 +9,21 @@
 ////- Thống kê và báo cáo: Thống kê số lượng sách mượn/trả, báo cáo người dùng.
 ////- Đăng xuất: Kết thúc phiên làm việc và đăng xuất khỏi hệ thống
 package view;
-import entities.Customer;
+import entities.*;
+import service.AccountService;
 import service.AdminService;
-import service.CustomerService;
 import util.InputUtil;
 import java.util.InputMismatchException;
 
 import java.util.Scanner;
 public class AdminMenu {
     private final AdminService adminService;
-
-    public AdminMenu(AdminService adminService) {
+    private final MainMenu mainMenu;
+    public AdminMenu(AdminService adminService, MainMenu mainMenu) {
         this.adminService = adminService;
+        this.mainMenu = mainMenu;
     }
+
     public void menu() {
         while (true)
         {
@@ -43,14 +45,16 @@ public class AdminMenu {
                     bookMenu();
                     break;
                 case 3:
-                    libraryMenu();
+                    borrowbookMenu();
                     break;
                 case 4:
-                    showtimeMenu();
+                    returnbookMenu();
                     break;
                 case 5:
+                    Statisticreport();
                     break;
                 case 6:
+                    mainMenu.mainmenu(AccountService.user);
                     return;
             }
         }
@@ -66,7 +70,7 @@ public class AdminMenu {
             System.out.println("4. In danh sách sách");
             System.out.println("5. Thoát: ");
             int choice = InputUtil.chooseOption("Xin mời chọn chức năng: ",
-                    "Chức năng là số dương từ 1 tới 5, vui lòng nhập lại: ", 1, 4);
+                    "Chức năng là số dương từ 1 tới 5, vui lòng nhập lại: ", 1, 5);
             switch (choice) {
                 case 1:
                     break;
@@ -140,7 +144,98 @@ public class AdminMenu {
             }
         }
     }
+    private void borrowbookMenu(){
+        while (true){
+            System.out.println("------- PHẦN MỀM QUẢN LÝ THƯ VIỆN --------");
+            System.out.println("------------------ QUẢN LÝ DANH SÁCH SÁCH MƯỢN------------------");
+            System.out.println("1. Tìm kiếm sách theo tên");
+            System.out.println("2. Tìm kiếm sách theo danh mục sách");
+            System.out.println("3. Quản lý danh mục sách");
+            System.out.println("4. Thêm mới sách");
+            System.out.println("5. Cập nhật thông tin sách");
+            System.out.println("6. Danh sách các sách đang mượn");
+            System.out.println("7. Thoát");
+            int choice = InputUtil.chooseOption("Xin mời chọn chức năng",
+                    "Chức năng là số dương từ 1 tới 7, vui lòng nhập lại: ", 1, 7);
+            switch (choice) {
+                case 1:
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    showCategoryManagementMenu();
+                    break;
+                case 4:
+                    break;
+                case 5:
+                    break;
+                case 6:
+                    break;
+                case 7:
+                    return;
+            }
+        }
+    }
 
+    private void returnbookMenu(){
+        while(true){
+
+            System.out.println("------- PHẦN MỀM QUẢN LÝ THƯ VIỆN --------");
+            System.out.println("------------------ QUẢN LÝ DANH SÁCH SÁCH TRẢ------------------");
+            System.out.println("1. Tìm kiếm sách theo tên");
+            System.out.println("2. Tìm kiếm sách theo danh mục sách");
+            System.out.println("3. Quản lý danh mục sách");
+            System.out.println("4. Thêm mới sách");
+            System.out.println("5. Cập nhật thông tin sách");
+            System.out.println("6. Danh sách các sách đã trả");
+            System.out.println("7. Danh sách các sách chưa trả");
+            System.out.println("8. Thoát");
+            int choice = InputUtil.chooseOption("Xin mời chọn chức năng",
+                    "Chức năng là số dương từ 1 tới 8, vui lòng nhập lại: ", 1, 8);
+            switch (choice) {
+                case 1:
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    showCategoryManagementMenu();
+                    break;
+                case 4:
+                    break;
+                case 5:
+                    break;
+                case 6:
+                    break;
+                case 7:
+                    break;
+                case 8:
+                    return;
+            }
+        }
+    }
+    private void Statisticreport(){
+        while(true){
+            System.out.println("------- PHẦN MỀM QUẢN LÝ THƯ VIỆN --------");
+            System.out.println("------------------ QUẢN LÝ BÁO CÁO THỐNG KÊ------------------");
+            System.out.println("1. Thống kê số lượng sách mượn");
+            System.out.println("2. Thống kê số lượng sách trả");
+            System.out.println("3. Báo cáo người dùng");
+            System.out.println("4. Thoát");
+            int choice = InputUtil.chooseOption("Xin mời chọn chức năng",
+                    "Chức năng là số dương từ 1 tới 4, vui lòng nhập lại: ", 1, 4);
+            switch (choice) {
+                case 1:
+                    break;
+                case 2:
+                    break;
+                case 3:
+                    showCategoryManagementMenu();
+                    break;
+                case 4:
+                    return;
+            }
+        }
+    }
 
     private void userManagementMenu() {
         while (true) {
@@ -192,7 +287,7 @@ public class AdminMenu {
     }
 
     private void statusUserManagementMenu() {
-        Customer user;
+        User user;
         int idUserLock;
         while (true) {
             System.out.println("------- PHẦN MỀM QUẢN LÝ THƯ VIỆN --------");

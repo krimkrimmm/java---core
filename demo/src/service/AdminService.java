@@ -2,7 +2,7 @@ package service;
 
 import constant.Regex;
 import constant.Status;
-import entities.Customer;
+import entities.*;
 import enums.Role;
 import main.Main;
 import util.FileUtil;
@@ -14,21 +14,21 @@ import java.util.List;
 import java.util.Scanner;
 
 public class AdminService {
-    private List<Customer> users;
+    private List<User> users;
     private List<String> lockedCustomer = new ArrayList<>();
     private static final HashSet<String> lockUserByEmails = new HashSet<>();
 
     private static final String USER_DATA_FILE = "users.json";
     private static final String ADMIN_EMAIL = "admin@gmail.com";
     private static final String ADMIN_PASSWORD = "admin";
-    private final FileUtil<Customer> fileUtil = new FileUtil<>();
+    private final FileUtil<User> fileUtil = new FileUtil<>();
     private static int AUTO_ID;
 
 
     private static final int MAX_LOGIN_TIMES = 5;
 
-    public Customer findUserByMail(String email){
-        for (Customer user : users) {
+    public User findUserByMail(String email){
+        for (User user : users) {
             if (user.getEmail() == email) {
                 return user;
             }
@@ -36,8 +36,8 @@ public class AdminService {
         return null;
     }
 
-    public Customer findUserById(int idUser) {
-        for (Customer user : users) {
+    public User findUserById(int idUser) {
+        for (User user : users) {
             if (user.getId() == idUser) {
                 return user;
             }
@@ -45,15 +45,24 @@ public class AdminService {
         return null;
     }
 
-    private Customer findUserByEmail(String email) {
-        for (Customer user : users) {
+    public User findUserByName(int idUser) {
+        for (User user : users) {
+            if (user.getId() == idUser) {
+                return user;
+            }
+        }
+        return null;
+    }
+
+    private User findUserByEmail(String email) {
+        for (User user : users) {
             if (user.getEmail().equals(email)) {
                 return user;
             }
         }
         return null;
     }
-    public Customer createUserCommonInfo() {
+    public User createUserCommonInfo() {
         // TODO - nhập các thông tin cần tạo cho 1 user
         //  (chú ý, cần chọn quyền của user vì đây là admin tạo user nên admin hoan toàn có thể chọn user họ tạo
         //  là một admin hay là 1 user bình thường)
@@ -72,7 +81,7 @@ public class AdminService {
                 System.out.println("Email không hợp lệ, vui lòng nhập lại đúng định dạng mail: ");
                 continue;
             }
-            Customer existedUser = findUserByEmail(email);
+            User existedUser = findUserByEmail(email);
             if (existedUser != null) {
                 System.out.println("Email đã tồn tại trong hệ thống, vui lòng nhập lại: ");
                 continue;
@@ -114,7 +123,7 @@ public class AdminService {
         System.out.println("1. Admin");
         System.out.println("2. Khách hàng");
         int choice = InputUtil.chooseOption("Xin mời chọn chức năng: ",
-                "Chức năng là số dương từ 1 tới 2, vui lòng nhập lại: ", 1, 2);
+                "Chức năng là số dương từ 1 tới 2, vui lòng nhập lại: ", 1, 3);
         role = switch (choice) {
             case 1 -> Role.ADMIN;
             case 2 -> Role.CUSTOMER;
@@ -124,14 +133,14 @@ public class AdminService {
         System.out.println("Mời bạn nhập địa chỉ : ");
         address = new Scanner(System.in).nextLine();
         double balance = 0;
-        Customer user = new Customer(AUTO_ID++, email, password, role, phone, address, balance, name, Status.ACTIVE);
+        User user = new User(AUTO_ID++, email, password, phone, role,  address, balance, name, Status.ACTIVE);
         users.add(user);
         saveUserData();
         return user;
     }
-    public void showUsers(List<Customer> users1) {
+    public void showUsers(List<User> users1) {
         printHeader();
-        for (Customer user : users1) {
+        for (User user : users1) {
             showUserDetail(user);
         }
     }
@@ -141,12 +150,12 @@ public class AdminService {
         System.out.println("------------------------------------------------------------------------------------------------------------------------------");
     }
 
-    public void showUserDetail(Customer user) {
+    public void showUserDetail(User user) {
         System.out.printf("%-5s%-30s%-30s%-20s%-20s%-10s%-10s%-10s%n", user.getId(), user.getName(), user.getEmail(), user.getPhone(), user.getAddress(), user.getRole(), user.getBalance(),user.getStatus());
     }
 
     public void updateUserInformation(int idUserUpdate) {
-        Customer user = findUserById(idUserUpdate);
+        User user = findUserById(idUserUpdate);
         System.out.println("Mời bạn chọn phần thông tin muốn chỉnh sửa: ");
         System.out.println("1. Email");
         System.out.println("2. Password");
@@ -167,7 +176,7 @@ public class AdminService {
                         continue;
                     }
                     boolean coTrungEmailKhong = false;
-                    for (Customer user1 : users) {
+                    for (User user1 : users) {
                         if (newEmail.equalsIgnoreCase(user1.getEmail()) && user1.getId() != user.getId()) {
                             System.out.println("Email đã tồn tại vui lòng nhập lại");
                             coTrungEmailKhong = true;
@@ -223,7 +232,7 @@ public class AdminService {
         saveUserData();// FILE - khi có thay đổi về list user, can luu vao file
     }
 
-    public void showUser(Customer user) {
+    public void showUser(User user) {
         printHeader();
         showUserDetail(user);
     }
@@ -234,7 +243,7 @@ public class AdminService {
 
     public void setUsers() {
 
-        List<Customer> userList = fileUtil.readDataFromFile(USER_DATA_FILE, Customer[].class);
+        List<User> userList = fileUtil.readDataFromFile(USER_DATA_FILE, User[].class);
         users = userList != null ? userList : new ArrayList<>();
     }
 
@@ -243,7 +252,7 @@ public class AdminService {
             createAdmin();
             return;
         }
-        for (Customer user : users) {
+        for (User user : users) {
             if (user.getEmail().equalsIgnoreCase(ADMIN_EMAIL)
                     && user.getPassword().equalsIgnoreCase(ADMIN_PASSWORD)) {
                 return;
@@ -253,7 +262,7 @@ public class AdminService {
     }
 
     private void createAdmin() {
-        Customer user = new Customer(ADMIN_EMAIL, ADMIN_PASSWORD, Role.ADMIN);
+        User user = new User(ADMIN_EMAIL, ADMIN_PASSWORD, Role.ADMIN);
         user.setId(0);
         users.add(user);
         saveUserData();
@@ -261,7 +270,7 @@ public class AdminService {
 
     public void findCurrentAutoId() {
         int maxId = -1;
-        for (Customer user : users) {
+        for (User user : users) {
             if (user.getId() > maxId) {
                 maxId = user.getId();
             }
@@ -269,8 +278,8 @@ public class AdminService {
         AUTO_ID = maxId + 1;
     }
 
-    public Customer getLoggedInUser() {
-        for (Customer userTemp : users) {
+    public User getLoggedInUser() {
+        for (User userTemp : users) {
             if (userTemp.getId() == Main.LOGGED_IN_CUSTOMER.getId()) {
                 return userTemp;
             }
@@ -360,7 +369,7 @@ public class AdminService {
 //    }
 
     public void showBalance() {
-        Customer user = getLoggedInUser();
+        User user = getLoggedInUser();
         System.out.println("Số dư tài khoản của khách hàng là " + user.getBalance());
     }
 
@@ -369,7 +378,7 @@ public class AdminService {
 
     public void lockedUserById(int idUserLock) {
 
-        for (Customer user:users) {
+        for (User user:users) {
             if (user.getId() == idUserLock) {
                 user.setStatus(Status.INACTIVE);
                 System.out.println("User có ID trên đã được khóa");
@@ -382,7 +391,7 @@ public class AdminService {
     }
 
     public void unlockedUserById(int idUserLock) {
-        for (Customer user:users) {
+        for (User user:users) {
             if (user.getId() == idUserLock) {
                 user.setStatus(Status.ACTIVE);
                 System.out.println("User có ID trên đã được mở khóa");
@@ -395,7 +404,7 @@ public class AdminService {
     }
 
     public void updateUserBalance(int idUser, double amount) {
-        for (Customer user : users) {
+        for (User user : users) {
             if (user.getId() == idUser) {
                 user.setBalance(user.getBalance() + amount);
                 System.out.println("Số dư tài khoản của quý khách là " + user.getBalance());
@@ -405,3 +414,6 @@ public class AdminService {
         }
     }
 }
+
+
+

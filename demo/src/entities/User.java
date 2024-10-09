@@ -2,7 +2,6 @@ package entities;
 
 import constant.Status;
 import enums.Role;
-
 public class User {
     private static int AUTO_ID = 1;
 
@@ -25,6 +24,7 @@ public class User {
         this.address = address;
         this.balance = balance;
         this.name = name;
+
         this.status = status;
     }
 
@@ -35,7 +35,6 @@ public class User {
         this.phone = phone;
         this.address = address;
     }
-
     public User(String email, String password, Role role) {
         this.email = email;
         this.password = password;
@@ -47,7 +46,7 @@ public class User {
         AUTO_ID++;
     }
 
-    public User(int id, String email, String password, String phone,Role role, String address, double balance, String name, Status status) {
+    public User(int id, String email, String password, String phone, Role role, String address, double balance, String name, Status status) {
         this.id = id;
         this.email = email;
         this.password = password;
@@ -152,3 +151,8 @@ public class User {
     }
 
 }
+
+
+
+
+

@@ -8,16 +8,19 @@
 package view;
 
 import entities.Book;
+import service.AccountService;
 import service.LibrarianService;
 import util.InputUtil;
 
 import java.util.List;
 
-public class LibrarianMenu {
+public class LibrarianMenu
+{
     private final LibrarianService librarianService;
-
-    public LibrarianMenu(LibrarianService librarianService) {
+    private final MainMenu mainMenu;
+    public LibrarianMenu(LibrarianService librarianService, MainMenu mainMenu) {
         this.librarianService = librarianService;
+        this.mainMenu = mainMenu;
     }
     public void menu(){
         while (true){
@@ -45,8 +48,11 @@ public class LibrarianMenu {
                 case 4:
                     break;
                 case 5:
+                    mainMenu.mainmenu(AccountService.user);
                     return;
             }
         }
     }
 }
+
+
